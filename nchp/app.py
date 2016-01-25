@@ -82,6 +82,7 @@ class NCHPApp(Application):
             'api_port': self.api_port,
             'api_ip': self.api_ip,
             'authtoken': self.auth_token,
+            'default_target': self.default_target,
         }
         return template.render(**context)
 
