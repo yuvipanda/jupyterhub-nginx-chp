@@ -4,6 +4,8 @@ from traitlets.config import Application
 from traitlets import Unicode, Integer, Dict
 from tempfile import NamedTemporaryFile
 
+from nchp.dnsutils import get_nameservers
+
 
 class NCHPApp(Application):
     name = Unicode("nchp")
@@ -17,10 +19,12 @@ class NCHPApp(Application):
     })
 
     dns_resolver = Unicode(
-        '8.8.8.8',
         config=True,
         help='DNS resolver for nginx to use'
     )
+
+    def _dns_resolver_default(self):
+        return get_nameservers()[0]
 
     public_ip = Unicode(
         '0.0.0.0',
