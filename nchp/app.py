@@ -69,11 +69,9 @@ class NCHPApp(Application):
     def build_nginx_conf(self):
         # FIXME: Use PackageLoader here!
         env = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(
-                os.path.join(
-                    os.path.dirname(__file__),
-                    'templates'
-                )
+            loader=jinja2.PackageLoader(
+                'nchp',
+                'templates'
             )
         )
         template = env.get_template('nginx.conf')
@@ -93,8 +91,3 @@ class NCHPApp(Application):
             f.write(conf.encode('utf-8'))
             f.flush()
             os.execle(self.nginx_path, self.nginx_path, '-c', f.name, {})
-
-
-app = NCHPApp()
-app.initialize()
-app.start()
