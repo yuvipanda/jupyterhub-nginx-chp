@@ -9,6 +9,7 @@ setup(
     author_email='yuvipanda@riseup.net',
     license='BSD',
     packages=['nchp'],
+    include_package_data=True,
     entry_points={
         'console_scripts': [
             'nchp = nchp.__main__:main'
