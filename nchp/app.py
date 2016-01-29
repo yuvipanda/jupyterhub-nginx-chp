@@ -3,6 +3,7 @@ import os
 from traitlets.config import Application
 from traitlets import Unicode, Integer, Dict
 from tempfile import NamedTemporaryFile
+from urllib.parse import urlsplit, urlunsplit
 
 from nchp.dnsutils import get_nameservers
 
@@ -79,6 +80,29 @@ class NCHPApp(Application):
             )
         )
         template = env.get_template('nginx.conf')
+
+        # HACK: Replace localhost with 127.0.0.1
+        # Reasons:
+        #   - Some DNS servers do not resolve localhost
+        #     to 127.0.0.1 (such as 8.8.8.8). So anyone
+        #     using such DNS servers will have this fail,
+        #     since nginx uses the DNS server only for
+        #     name resolution
+        #   - Some DNS servers resolve localhost in A but
+        #     not AAAA records (like Wikimedia's!). This too
+        #     causes nginx to fail, since the AAAA returns
+        #     NXDOMAIN, which makes nginx fail hard
+        #   - Even when all of this works, it is slightly
+        #     faster to just avoid the DNS lookup for something
+        #     as trivial as looking up localhost
+        if self.default_target:
+            parts = urlsplit(self.default_target)
+            self.default_target = urlunsplit(
+                (parts[0],
+                 parts[1].replace('localhost', '127.0.0.1'),
+                 parts[2], parts[3], parts[4])
+            )
+
         context = {
             'dns_resolver': self.dns_resolver,
             'public_port': self.public_port,
