@@ -20,9 +20,11 @@ class NCHPApp(Application):
         'ssl-key': 'NCHPApp.public_ssl_key',
         'ssl-cert': 'NCHPApp.public_ssl_cert',
         'ssl-ciphers': 'NCHPApp.public_ssl_ciphers',
+        'ssl-dhparam': 'NCHPApp.public_ssl_dhparam',
         'api-ssl-key': 'NCHPApp.api_ssl_key',
         'api-ssl-cert': 'NCHPApp.api_ssl_cert',
-        'api-ssl-ciphers': 'NCHPApp.api_ssl_ciphers'
+        'api-ssl-ciphers': 'NCHPApp.api_ssl_ciphers',
+        'api-ssl-dhparam': 'NCHPApp.api_ssl_dhparam'
     })
 
     dns_resolver = Unicode(
@@ -98,6 +100,11 @@ class NCHPApp(Application):
         help=': separated list of ciphers used to serve public SSL'
     )
 
+    public_ssl_dhparam = Unicode(
+        config=True,
+        help='SSL Diffie-Helman Parameters file (if any)'
+    )
+
     api_ssl_cert = Unicode(
         config=True,
         help='Path to the SSL certificate for private api'
@@ -120,6 +127,11 @@ class NCHPApp(Application):
         ]),
         config=True,
         help=': separated list of ciphers used to serve api SSL'
+    )
+
+    api_ssl_dhparam = Unicode(
+        config=True,
+        help='SSL Diffie-Helman Parameters file (if any)'
     )
 
     def initialize(self, argv=None):
@@ -173,9 +185,11 @@ class NCHPApp(Application):
             'public_ssl_cert': self.public_ssl_cert,
             'public_ssl_key': self.public_ssl_key,
             'public_ssl_ciphers': self.public_ssl_ciphers,
+            'public_ssl_dhparam': self.public_ssl_dhparam,
             'api_ssl_cert': self.api_ssl_cert,
             'api_ssl_key': self.api_ssl_key,
             'api_ssl_ciphers': self.api_ssl_ciphers,
+            'api_ssl_dhparam': self.api_ssl_dhparam
         }
         return template.render(**context)
 
