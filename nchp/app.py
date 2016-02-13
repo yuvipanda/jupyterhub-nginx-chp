@@ -17,6 +17,10 @@ class NCHPApp(Application):
         'api-ip': 'NCHPApp.api_ip',
         'api-port': 'NCHPApp.api_port',
         'default-target': 'NCHPApp.default_target',
+        'ssl-key': 'NCHPApp.public_ssl_key',
+        'ssl-cert': 'NCHPApp.public_ssl_cert',
+        'api-ssl-key': 'NCHPApp.api_ssl_key',
+        'api-ssl-cert': 'NCHPApp.api_ssl_cert'
     })
 
     dns_resolver = Unicode(
@@ -68,6 +72,26 @@ class NCHPApp(Application):
         help='Full path to nginx executable to use'
     )
 
+    public_ssl_cert = Unicode(
+        config=True,
+        help='Path to the SSL certificate for public facing proxy'
+    )
+
+    public_ssl_key = Unicode(
+        config=True,
+        help='Path to the SSL key for public facing proxy'
+    )
+
+    api_ssl_cert = Unicode(
+        config=True,
+        help='Path to the SSL certificate for private api'
+    )
+
+    api_ssl_key = Unicode(
+        config=True,
+        help='Path to the SSL key for private API'
+    )
+
     def initialize(self, argv=None):
         self.parse_command_line(argv)
 
@@ -103,6 +127,9 @@ class NCHPApp(Application):
                  parts[2], parts[3], parts[4])
             )
 
+        public_ssl = self.public_ssl_cert != ''
+        api_ssl = self.api_ssl_cert != ''
+
         context = {
             'dns_resolver': self.dns_resolver,
             'public_port': self.public_port,
@@ -111,6 +138,12 @@ class NCHPApp(Application):
             'api_ip': self.api_ip,
             'authtoken': self.auth_token,
             'default_target': self.default_target,
+            'api_ssl': api_ssl,
+            'public_ssl': public_ssl,
+            'public_ssl_cert': self.public_ssl_cert,
+            'public_ssl_key': self.public_ssl_key,
+            'api_ssl_cert': self.api_ssl_cert,
+            'api_ssl_key': self.api_ssl_key
         }
         return template.render(**context)
 
