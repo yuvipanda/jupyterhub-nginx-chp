@@ -19,8 +19,10 @@ class NCHPApp(Application):
         'default-target': 'NCHPApp.default_target',
         'ssl-key': 'NCHPApp.public_ssl_key',
         'ssl-cert': 'NCHPApp.public_ssl_cert',
+        'ssl-ciphers': 'NCHPApp.public_ssl_ciphers',
         'api-ssl-key': 'NCHPApp.api_ssl_key',
-        'api-ssl-cert': 'NCHPApp.api_ssl_cert'
+        'api-ssl-cert': 'NCHPApp.api_ssl_cert',
+        'api-ssl-ciphers': 'NCHPApp.api_ssl_ciphers'
     })
 
     dns_resolver = Unicode(
@@ -82,6 +84,20 @@ class NCHPApp(Application):
         help='Path to the SSL key for public facing proxy'
     )
 
+    # Default to strong SSL Ciphers as of 2016-02-13, stolen from Wikimedia
+    public_ssl_ciphers = Unicode(
+        ':'.join([
+            'ECDHE-ECDSA-AES128-GCM-SHA256',
+            'ECDHE-RSA-AES128-GCM-SHA256',
+            'ECDHE-ECDSA-AES256-GCM-SHA384',
+            'ECDHE-RSA-AES256-GCM-SHA384',
+            'DHE-RSA-AES128-GCM-SHA256',
+            'DHE-RSA-AES256-GCM-SHA384'
+        ]),
+        config=True,
+        help=': separated list of ciphers used to serve public SSL'
+    )
+
     api_ssl_cert = Unicode(
         config=True,
         help='Path to the SSL certificate for private api'
@@ -90,6 +106,20 @@ class NCHPApp(Application):
     api_ssl_key = Unicode(
         config=True,
         help='Path to the SSL key for private API'
+    )
+
+    # Default to strong SSL Ciphers as of 2016-02-13, stolen from Wikimedia
+    api_ssl_ciphers = Unicode(
+        ':'.join([
+            'ECDHE-ECDSA-AES128-GCM-SHA256',
+            'ECDHE-RSA-AES128-GCM-SHA256',
+            'ECDHE-ECDSA-AES256-GCM-SHA384',
+            'ECDHE-RSA-AES256-GCM-SHA384',
+            'DHE-RSA-AES128-GCM-SHA256',
+            'DHE-RSA-AES256-GCM-SHA384'
+        ]),
+        config=True,
+        help=': separated list of ciphers used to serve api SSL'
     )
 
     def initialize(self, argv=None):
@@ -142,8 +172,10 @@ class NCHPApp(Application):
             'public_ssl': public_ssl,
             'public_ssl_cert': self.public_ssl_cert,
             'public_ssl_key': self.public_ssl_key,
+            'public_ssl_ciphers': self.public_ssl_ciphers,
             'api_ssl_cert': self.api_ssl_cert,
-            'api_ssl_key': self.api_ssl_key
+            'api_ssl_key': self.api_ssl_key,
+            'api_ssl_ciphers': self.api_ssl_ciphers,
         }
         return template.render(**context)
 
