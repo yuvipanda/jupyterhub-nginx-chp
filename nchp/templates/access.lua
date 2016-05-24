@@ -9,7 +9,6 @@ local specs = ngx.shared.routes:get_keys()
 -- and with a trie, even lower.
 table.sort(specs, function(a, b) return string.len(a) < string.len(b) end)
 for i, spec in pairs(specs) do
-    ngx.log(ngx.ERR, spec .. routespec)
     if string.sub(routespec,1,string.len(spec)) == spec then
         ngx.var.upstream = ngx.shared.routes:get(spec)
 

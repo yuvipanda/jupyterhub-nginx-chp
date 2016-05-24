@@ -21,9 +21,6 @@ if ngx.req.get_method() == "POST" then
 
     ngx.shared.routes:set(routespec, target)
     ngx.shared.lastaccess:set(routespec, os.time())
-    ngx.log(ngx.ERR, ngx.var.request_uri)
-    ngx.log(ngx.ERR, routespec)
-    ngx.log(ngx.ERR, target)
     ngx.exit(201)
 elseif ngx.req.get_method() == "DELETE" then
     local routespec = string.sub(ngx.var.request_uri, 12)
@@ -35,9 +32,7 @@ elseif ngx.req.get_method() == "GET" then
     local routes = {}
 
     local routespecs = ngx.shared.routes:get_keys()
-    ngx.log(ngx.ERR, ngx.shared.routes:get_keys()[0])
     for i, spec in pairs(routespecs) do
-        ngx.log(ngx.ERR, spec)
         routes[spec] = {
             target = ngx.shared.routes:get(spec),
             lastaccess = os.date("!%Y-%m-%dT%TZ", ngx.shared.lastaccess:get(spec))
