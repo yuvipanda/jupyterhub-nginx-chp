@@ -39,7 +39,7 @@ elseif ngx.req.get_method() == "GET" then
         routes[spec] = {
             target = ngx.shared.routes:get(spec),
             user = ngx.shared.users:get(spec),
-            lastaccess = os.date("!%Y-%m-%dT%TZ", ngx.shared.lastaccess:get(spec))
+            last_activity = os.date("!%Y-%m-%dT%TZ", ngx.shared.lastaccess:get(spec))
         }
     end
 
