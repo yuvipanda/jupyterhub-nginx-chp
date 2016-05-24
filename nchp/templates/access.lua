@@ -7,7 +7,7 @@ local specs = ngx.shared.routes:get_keys()
 -- route to the first prefix that matches. The sorting is O(nlogn)
 -- so the entire thing is O(logn). We can easily get this to O(n)
 -- and with a trie, even lower.
-table.sort(specs, function(a, b) return string.len(a) < string.len(b) end)
+table.sort(specs, function(a, b) return string.len(a) > string.len(b) end)
 for i, spec in pairs(specs) do
     if string.sub(routespec,1,string.len(spec)) == spec then
         ngx.var.upstream = ngx.shared.routes:get(spec)
