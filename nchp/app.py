@@ -24,14 +24,16 @@ class NCHPApp(Application):
         'api-ssl-key': 'NCHPApp.api_ssl_key',
         'api-ssl-cert': 'NCHPApp.api_ssl_cert',
         'api-ssl-ciphers': 'NCHPApp.api_ssl_ciphers',
-        'api-ssl-dhparam': 'NCHPApp.api_ssl_dhparam'
+        'api-ssl-dhparam': 'NCHPApp.api_ssl_dhparam',
+        # FIXME: Actually implement this! Adding this to make nchp work with
+        # newer versions of jupyterhub
+        'error-path': 'NCHPApp.error_path',
     })
 
     dns_resolver = Unicode(
         config=True,
         help='DNS resolver for nginx to use'
     )
-
     def _dns_resolver_default(self):
         return get_nameservers()[0]
 
@@ -134,6 +136,11 @@ class NCHPApp(Application):
         help='SSL Diffie-Helman Parameters file (if any)'
     )
 
+    error_path = Unicode(
+        config=True,
+        help='Path to folder containing nicer looking files to serve on errors. NOT IMPLEMENTED YET'
+    )
+
     def initialize(self, argv=None):
         self.parse_command_line(argv)
 
@@ -189,7 +196,8 @@ class NCHPApp(Application):
             'api_ssl_cert': self.api_ssl_cert,
             'api_ssl_key': self.api_ssl_key,
             'api_ssl_ciphers': self.api_ssl_ciphers,
-            'api_ssl_dhparam': self.api_ssl_dhparam
+            'api_ssl_dhparam': self.api_ssl_dhparam,
+            'error_path': self.error_path,
         }
         return template.render(**context)
 
