@@ -27,6 +27,7 @@ class NCHPApp(Application):
         'api-ssl-dhparam': 'NCHPApp.api_ssl_dhparam',
         # FIXME: Actually implement this! Adding this to make nchp work with
         # newer versions of jupyterhub
+        'error-target': 'NCHPApp.error_target',
         'error-path': 'NCHPApp.error_path',
     })
 
@@ -141,6 +142,11 @@ class NCHPApp(Application):
         help='Path to folder containing nicer looking files to serve on errors. NOT IMPLEMENTED YET'
     )
 
+    error_target = Unicode(
+        config=True,
+        help='Target to route to on error. NOT IMPLEMENTED YET'
+    )
+
     def initialize(self, argv=None):
         self.parse_command_line(argv)
 
@@ -198,6 +204,7 @@ class NCHPApp(Application):
             'api_ssl_ciphers': self.api_ssl_ciphers,
             'api_ssl_dhparam': self.api_ssl_dhparam,
             'error_path': self.error_path,
+            'error_target': self.error_target
         }
         return template.render(**context)
 
