@@ -188,12 +188,12 @@ class NCHPApp(Application):
         # '' means 'listen on all interfaces' in python / nodejs
         # So we take it in to be compatible
         # FIXME: check what this does for ipv6
-        if self.public_ip = '':
+        if self.public_ip == '':
             public_ip = '0.0.0.0'
         else:
             public_ip = self.public_ip
 
-        if self.api_ip = '':
+        if self.api_ip == '':
             api_ip = '0.0.0.0'
         else:
             api_ip = self.api_ip
