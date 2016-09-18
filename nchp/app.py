@@ -183,6 +183,13 @@ class NCHPApp(Application):
             return 'syslog:server=unix:/dev/log,nohostname'
         return path
 
+    # performance tuning!
+    client_max_body_size = Unicode(
+        '256M',
+        help='Maximum size of client uploads. This limits notebook sizes. Accepts common byte suffixes (M/k/G). Set 0 to disable limit',
+        config=True
+    )
+
     def initialize(self, argv=None):
         self.parse_command_line(argv)
 
@@ -256,6 +263,7 @@ class NCHPApp(Application):
             'error_path': self.error_path,
             'error_target': self.error_target,
             'extra_public_nginx_config': self.extra_public_nginx_config,
+            'client_max_body_size': self.client_max_body_size
         }
         return template.render(**context)
 
