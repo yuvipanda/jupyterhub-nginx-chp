@@ -1,5 +1,6 @@
 import jinja2
 import os
+import stat
 from traitlets.config import Application
 from traitlets import Unicode, Integer, Dict
 from tempfile import NamedTemporaryFile
@@ -147,6 +148,31 @@ class NCHPApp(Application):
         help='Target to route to on error. NOT IMPLEMENTED YET'
     )
 
+    def access_log_dest(self):
+        """
+        Return the destination for access logs
+
+        If we're running this as a systemd service, systemd
+        makes /dev/stdout and friends be sockets that lead
+        into journald, rather than files. This confuses
+        nginx, which expects to `open()` them like normal
+        files. nginx supports 'stderr' as a directive for
+        error_log, but *not* access log. Since we still
+        want to get them out into stderr, we hack this in.
+
+        If /dev/stdout is a socket, we then write to syslog.
+        JournalD also picks up syslog, so the end result is
+        the same from an admin's pov. Just uglier and hackier
+
+        I guess the 'right' thing here is for nginx to
+        support `stderr` as a target in access_log just like
+        for `error_log`
+        """
+        path = '/dev/stdout'
+        if stat.S_ISSOCK(os.stat(path).st_mode):
+            return 'syslog:server=unix:/dev/log,nohostname'
+        return path
+
     def initialize(self, argv=None):
         self.parse_command_line(argv)
 
@@ -200,6 +226,7 @@ class NCHPApp(Application):
 
         context = {
             'dns_resolver': self.dns_resolver,
+            'access_log_dest': self.access_log_dest(),
             'public_port': self.public_port,
             'public_ip': public_ip,
             'api_port': self.api_port,
