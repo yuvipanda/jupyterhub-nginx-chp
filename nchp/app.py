@@ -147,6 +147,13 @@ class NCHPApp(Application):
         help='Target to route to on error. NOT IMPLEMENTED YET'
     )
 
+    # performance tuning!
+    client_max_body_size = Unicode(
+        '256M',
+        help='Maximum size of client uploads. This limits notebook sizes. Accepts common byte suffixes (M/k/G). Set 0 to disable limit',
+        config=True
+    )
+
     def initialize(self, argv=None):
         self.parse_command_line(argv)
 
@@ -217,7 +224,8 @@ class NCHPApp(Application):
             'api_ssl_ciphers': self.api_ssl_ciphers,
             'api_ssl_dhparam': self.api_ssl_dhparam,
             'error_path': self.error_path,
-            'error_target': self.error_target
+            'error_target': self.error_target,
+            'client_max_body_size': self.client_max_body_size
         }
         return template.render(**context)
 
