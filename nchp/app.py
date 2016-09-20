@@ -30,8 +30,13 @@ class NCHPApp(Application):
         # newer versions of jupyterhub
         'error-target': 'NCHPApp.error_target',
         'error-path': 'NCHPApp.error_path',
+        'config': 'NCHPApp.config_file'
     })
 
+    config_file = Unicode('',
+        config=True,
+        help='Path to config file to read config parameters from'
+    )
     dns_resolver = Unicode(
         config=True,
         help='DNS resolver for nginx to use'
@@ -249,6 +254,8 @@ class NCHPApp(Application):
         return template.render(**context)
 
     def start(self):
+        if self.config_file != '':
+            self.load_config_file(self.config_file)
         conf = self.build_nginx_conf()
         with NamedTemporaryFile() as f:
             f.write(conf.encode('utf-8'))
