@@ -153,6 +153,11 @@ class NCHPApp(Application):
         help='Target to route to on error. NOT IMPLEMENTED YET'
     )
 
+    extra_public_nginx_config = Unicode(
+        config=True,
+        help='Raw nginx config that will be added to the public facing nginx server\'s server directive',
+    )
+
     def access_log_dest(self):
         """
         Return the destination for access logs
@@ -249,7 +254,8 @@ class NCHPApp(Application):
             'api_ssl_ciphers': self.api_ssl_ciphers,
             'api_ssl_dhparam': self.api_ssl_dhparam,
             'error_path': self.error_path,
-            'error_target': self.error_target
+            'error_target': self.error_target,
+            'extra_public_nginx_config': self.extra_public_nginx_config,
         }
         return template.render(**context)
 
