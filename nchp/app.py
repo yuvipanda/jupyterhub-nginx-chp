@@ -1,10 +1,11 @@
-import jinja2
 import os
 import stat
-from traitlets.config import Application
-from traitlets import Unicode, Integer, Dict
 from tempfile import NamedTemporaryFile
 from urllib.parse import urlsplit, urlunsplit
+
+import jinja2
+from traitlets import Unicode, Integer, Dict
+from traitlets.config import Application
 
 from nchp.dnsutils import get_nameservers
 
