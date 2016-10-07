@@ -1,5 +1,6 @@
 from setuptools import setup
 
+
 setup(
     name='nchp',
     version='0.1',
@@ -10,6 +11,10 @@ setup(
     license='BSD',
     packages=['nchp'],
     include_package_data=True,
+    install_requires=[
+        'jinja2>=2.8,<3',
+        'traitlets>=4.3,<5'
+    ],
     entry_points={
         'console_scripts': [
             'nchp = nchp.__main__:main'
