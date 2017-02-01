@@ -31,7 +31,8 @@ class NCHPApp(Application):
         # newer versions of jupyterhub
         'error-target': 'NCHPApp.error_target',
         'error-path': 'NCHPApp.error_path',
-        'config': 'NCHPApp.config_file'
+        'config': 'NCHPApp.config_file',
+        'client-max-body-size': 'NCHPApp.client_max_body_size',
     })
 
     config_file = Unicode('',
