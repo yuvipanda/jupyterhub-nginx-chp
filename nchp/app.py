@@ -30,6 +30,7 @@ class NCHPApp(Application):
         # newer versions of jupyterhub
         'error-target': 'NCHPApp.error_target',
         'error-path': 'NCHPApp.error_path',
+        'client-max-body-size': 'NCHPApp.client_max_body_size',
     })
 
     dns_resolver = Unicode(
