@@ -1,3 +1,5 @@
+# NOTE: This repository is deprecated. JupyterHub now supports alternate proxy implementations directly: http://jupyterhub.readthedocs.io/en/latest/api/proxy.html
+
 # jupyterhub-nginx-chp #
 
 A replacement for [configurable-http-proxy](http://github.com/jupyter/configurable-http-proxy) that uses nginx+lua instead of NodeJS.
